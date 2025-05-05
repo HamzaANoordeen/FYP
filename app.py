@@ -18,7 +18,7 @@ st.set_page_config(page_title="Optimal Flight Booking Time", layout="wide")
 # Load data
 @st.cache_data
 def load_data():
-    df = pd.read_csv("data/Clean_Dataset.csv")
+    df = pd.read_csv("Clean_Dataset.csv")
     df = df.dropna(subset=["ticket price", "days before booking and traveling"])
     df["days before booking and traveling"] = pd.to_numeric(df["days before booking and traveling"], errors='coerce')
     df["ticket price"] = pd.to_numeric(df["ticket price"], errors='coerce')
