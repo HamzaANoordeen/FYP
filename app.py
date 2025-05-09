@@ -6,22 +6,13 @@ st.set_page_config(page_title="Flight Ticket Price Dashboard", layout="wide")
 
 @st.cache_data
 
-def load_model():
-    try:
-        # Get the absolute path to the model file
-        model_path = os.path.join(os.path.dirname(__file__), "flight_price_model.pkl")
-        with open(model_path, 'rb') as f:
-            saved_data = pickle.load(f)
-            return saved_data['model'], saved_data['features']
-    except Exception as e:
-        st.error(f"Failed to load model: {str(e)}")
-        return None, None
-
 def predict_flight_price(input_data):
-    """Handles all feature name mismatches"""
-    model, expected_features = load_model()
-    if model is None:
-        return None
+    """Completely handles all feature name mismatches"""
+    # 1. Load model and metadata
+    with open('flight_price_model.pkl', 'rb') as f:
+        saved_data = pickle.load(f)
+        model = saved_data['model']
+        expected_features = saved_data['features']
     
     
     # 2. Create a dictionary with ALL expected features initialized to 0
