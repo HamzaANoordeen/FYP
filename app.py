@@ -5,6 +5,15 @@ import plotly.express as px
 st.set_page_config(page_title="Flight Ticket Price Dashboard", layout="wide")
 
 @st.cache_data
+def load_data():
+    df = pd.read_csv("data/Clean_Dataset.csv")
+    df.rename(columns={
+        'price': 'ticket_price'
+    }, inplace=True)
+    return df
+
+df = load_data()
+import pickle
 
 def predict_flight_price(input_data):
     """Completely handles all feature name mismatches"""
