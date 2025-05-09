@@ -207,4 +207,3 @@ st.caption("Built for Flight Price Analysis 📊 | Visuals: Plotly | Interface: 
 # Footer
 st.markdown("---")
 st.markdown("Made by Hamza A Noordeen | Final Year Project 2025")
-
