@@ -86,12 +86,8 @@ st.subheader("🧭 Stops Distribution")
 fig8 = px.pie(df, names="stops", title="Distribution of Stops", template="plotly_white", hole=0.4)
 st.plotly_chart(fig8, use_container_width=True)
 
-st.subheader("🛬 Destination Popularity")
-dest_count = df["destination_city"].value_counts().reset_index()
-dest_count.columns = ["Destination", "Count"]
-fig9 = px.bar(dest_count, x="Destination", y="Count", title="Most Popular Destination Cities", color="Count", template="plotly_white", height=400)
-st.plotly_chart(fig9, use_container_width=True)
 st.subheader("🔮 Predict Flight Ticket Price")
+
 with st.form("prediction_form"):
     airline = st.selectbox("Airline", ["Air India", "GO_FIRST", "Indigo", "SpiceJet", "Vistara"])
     travel_class = st.selectbox("Class", ["Economy", "Business"])
@@ -104,8 +100,9 @@ with st.form("prediction_form"):
     month = st.selectbox("Month of Travel", ["Not specified"] + list(range(1, 13)))
 
     submitted = st.form_submit_button("Predict Price")
+
     if submitted:
-        # Handle default values
+        # Use defaults if not specified
         day_of_week_val = 3 if day_of_week == "Not specified" else int(day_of_week)
         month_val = 6 if month == "Not specified" else int(month)
 
@@ -120,12 +117,6 @@ with st.form("prediction_form"):
             "month": month_val
         }
 
-        prediction = predict_flight_price(user_input, travel_class)
-        st.success(f"Predicted Ticket Price: ₹{prediction:,.2f}")
-
-        }
-        
-        # Only use the relevant fields for prediction
         prediction = predict_flight_price(user_input, travel_class)
         st.success(f"Predicted Ticket Price: ₹{prediction:,.2f}")
 
