@@ -91,27 +91,38 @@ dest_count = df["destination_city"].value_counts().reset_index()
 dest_count.columns = ["Destination", "Count"]
 fig9 = px.bar(dest_count, x="Destination", y="Count", title="Most Popular Destination Cities", color="Count", template="plotly_white", height=400)
 st.plotly_chart(fig9, use_container_width=True)
-
 st.subheader("🔮 Predict Flight Ticket Price")
 with st.form("prediction_form"):
     airline = st.selectbox("Airline", ["Air India", "GO_FIRST", "Indigo", "SpiceJet", "Vistara"])
     travel_class = st.selectbox("Class", ["Economy", "Business"])
     departure_city = st.selectbox("Departure City", sorted(df["source_city"].unique()))
     arrival_city = st.selectbox("Arrival City", sorted(df["destination_city"].unique()))
+    duration = st.number_input("Duration (in minutes)", min_value=30, max_value=1800, value=120)
     stops = st.selectbox("Number of Stops", [0, 1, 2])
-    day_of_week = st.selectbox("Day of Week (0=Mon, 6=Sun)", list(range(7)), index=3)
-    month = st.selectbox("Month of Travel", list(range(1, 13)), index=5)
+    
+    day_of_week = st.selectbox("Day of Week (0=Mon, 6=Sun)", ["Not specified"] + list(range(7)))
+    month = st.selectbox("Month of Travel", ["Not specified"] + list(range(1, 13)))
 
-      submitted = st.form_submit_button("Predict Price")
+    submitted = st.form_submit_button("Predict Price")
     if submitted:
+        # Handle default values
+        day_of_week_val = 3 if day_of_week == "Not specified" else int(day_of_week)
+        month_val = 6 if month == "Not specified" else int(month)
+
         user_input = {
             "airline": airline,
             "class": travel_class,
             "departure_city": departure_city,
             "arrival_city": arrival_city,
+            "duration_mins": duration,
             "stop": stops,
-            "day_of_week": day_of_week,
-            "month": month
+            "day_of_week": day_of_week_val,
+            "month": month_val
+        }
+
+        prediction = predict_flight_price(user_input, travel_class)
+        st.success(f"Predicted Ticket Price: ₹{prediction:,.2f}")
+
         }
         
         # Only use the relevant fields for prediction
